@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		
+		<script>
+		        function animate(obj, target, callback) {
+		            clearInterval(obj.timer)
+		            obj.timer = setInterval(function () {
+		                var step = (target - obj.offsetLeft) / 10
+		                step = step > 0 ? Math.ceil(step) : Math.floor(step)
+		                if (obj.offsetLeft == target) {
+		                    clearInterval(obj.timer)
+		
+		                    if (callback) {
+		                        callback()
+		                    }
+		                }
+		                obj.style.left = obj.offsetLeft + step + 'px'
+		            }, 15)
+		        }
+		
+		        window.addEventListener('load', function () {
+		            var images = document.querySelector('.images')
+		            var arrow_l = document.querySelector('.arrow_l')
+		            var arrow_r = document.querySelector('.arrow_r')
+		            var moveWidth = images.offsetWidth
+		            images.addEventListener('mouseenter', function () {
+		                arrow_l.style.display = 'block'
+		                arrow_r.style.display = 'block'
+		                clearInterval(timer)
+		                timer = null
+		            })
+		            images.addEventListener('mouseleave', function () {
+		                arrow_l.style.display = 'none'
+		                arrow_r.style.display = 'none'
+		                timer = setInterval(function () {
+		                    arrow_r.click()
+		                }, 2000)
+		            })
+		            var ul = images.querySelector('ul')
+		            var ol = images.querySelector('ol')
+		            for (var i = 0; i < ul.children.length; i++) {
+		                var li = document.createElement('li')
+		                li.setAttribute('index', i)
+		                ol.appendChild(li)
+		                li.addEventListener('click', function () {
+		                    for (var i = 0; i < ol.children.length; i++) {
+		                        ol.children[i].className = ''
+		                    }
+		                    this.className = 'current'
+		                    var index = this.getAttribute('index')
+		                    num = index
+		                    circle = index
+		
+		                    animate(ul, -index * moveWidth)
+		
+		                })
+		            }
+		            ol.children[0].className = 'current'
+		            var first = ul.children[0].cloneNode(true)
+		            ul.appendChild(first)
+		
+		            var num = 0;
+		
+		            var circle = 0
+		
+		            arrow_r.addEventListener('click', function () {
+		                if (num == ul.children.length - 1) {
+		                    ul.style.left = 0
+		                    num = 0
+		                }
+		                num++
+		                animate(ul, -num * moveWidth)
+		
+		                circle++
+		                if (circle == ol.children.length) {
+		                    circle = 0
+		                }
+		                circleChange()
+		            })
+		            arrow_l.addEventListener('click', function () {
+		                if (num == 0) {
+		                    num = ul.children.length - 1
+		                    ul.style.left = -num * moveWidth + 'px'
+		                }
+		                num--
+		                animate(ul, -num * moveWidth)
+		
+		                circle--
+		                if (circle < 0) {
+		                    circle = ol.children.length - 1
+		                }
+		                circleChange()
+		            })
+		            function circleChange() {
+		                for (var i = 0; i < ol.children.length; i++) {
+		                    ol.children[i].className = ''
+		                }
+		                ol.children[circle].className = 'current'
+		            }
+		            var timer = setInterval(function () {
+		                arrow_r.click()
+		            }, 2000)
+		        })
+		
+		    </script>
+		<!-- 样式表 -->
+		<style>
+			/* --------------------------------------搜索框样式表 */
+			.topnav
+			{
+			    float: right;
+			    padding: 6px;
+			    border:1px solid gray;
+			    margin-top: 40px;
+			    margin-right: 160px;
+				background-color: #EFEFEF;
+			}
+			.topnav1
+			{
+				font-size: 17px;
+				border: none;
+				background-color: #EFEFEF;
+			}
+			/* ----------------------------------------导航条 */
+			.daohangtiao
+			{
+				ul {
+					list-style-type: none;
+					margin: 0;
+					padding-left: 180px;
+					overflow: hidden;
+					background-color: #323232;
+				}
+				li
+				{
+					display:inline;
+					float: left;
+					border-right: 1px solid gray;
+				}
+					li:last-child {
+					border-right: none;
+				}
+					li a {
+					display: block;
+					color: white;
+					text-align: center;
+					padding: 14px 30px;
+					text-decoration: none;
+				}
+			 
+				/*鼠标移动到选项上修改背景颜色 */
+				li a:hover {
+			    background-color: #111;
+				}
+			}
+			/* -------------------------------------------------------------轮播图 */
+			.lunbo
+			{
+				margin-top: -16px;
+				background-color: #323232;
+			}
+
+			.images {
+			    width: 1346px;
+			    height: 464px;
+			    position: relative;
+			    overflow: hidden;
+			}
+				
+			.lunbo ul {
+			    list-style-type: none;
+			    width: 600%;
+			    position: absolute;
+			}
+				
+			.lunbo ul li {
+			    float: left;
+			}
+				
+			.images a {
+			    text-decoration: none;
+			    color: white;
+			    position: absolute;
+			    top: 175px;
+			    display: none;
+			    z-index: 999;
+			}
+				
+			.arrow_l {
+			    left: 0;
+			    transform: translate(0, -50%);
+			}
+				
+			.arrow_r {
+			    right: 0;
+			    transform: translate(0, -50%);
+			}
+				
+			.lunbo ol {
+			    list-style-type: none;
+			    position: absolute;
+			    top: 0;
+			    left: 0;
+			    width: 350px;
+			    height: 350px;
+			    display: flex;
+			    justify-content: center;
+			    align-items: flex-end;
+				margin-left: 450px;
+				margin-top: 100px;
+			}
+				
+			.lunbo ol li {
+			    width: 10px;
+			    height: 10px;
+			    border-radius: 50%;
+			    border: 1px solid white;
+			    /* float: left; */
+			    margin-left: 5px;
+			}
+				
+			.current {
+			    background-color: white;
+			}
+			
+			/*--------------------------------- 公司新闻、公司介绍、人文才招聘 样式表*/
+			.biaoti    /*--------- 标题样式 */
+			{
+				font-size: 20px;
+				color:#44484B;
+			}
+			/* 新闻列表 */
+			.xinwen1
+			{
+				list-style-type: none;
+				float: left;
+				margin-left: -30px;
+				text-decoration: none;
+				list-style-image:url("img/list.jpg");
+				list-style:none;
+				
+				li
+				{
+					padding-top: 2px;
+				}
+				li a
+				{
+				color: #44484B;
+				text-decoration: none;
+				font-size: 12px;
+				}
+
+			}
+			/* 新闻日期 */
+			.xinwen2
+			{
+				list-style-type: none;
+				float: right;
+				text-decoration: none;
+				margin-right: 25px;
+				
+				li
+				{
+					padding-top: 2px;
+				}
+				
+				li a
+				{
+				color: #AFAFAF;
+				text-decoration: none;
+				font-size: 12px;
+				}
+			}
+			
+			/* 市场项目 */
+			.shichang-wenzi
+			{
+				font-size: 12px;
+				color:#44484B;
+			}
+			
+			.shichang-tuwen1
+			{
+				
+				margin-top: 20px;
+				width: 220px;
+				float: left;
+			}
+			
+			.shichang-tuwen234
+			{
+				
+				margin-top: 20px;
+				width: 220px;
+				float: left;
+				margin-left: 40px;
+			}
+			
+			/* 底部导航栏 */
+			.dibu-biaoti
+			{
+				font-size: 23px;
+				color:#5C5C5C;
+				padding-left: 20px;
+			}
+			.dibu-liebiao1
+			{
+				list-style-type: none;
+				float: left;
+				text-decoration: none;
+				margin-left: -20px;
+				list-style-image:url("img/list.jpg");
+				
+				li
+				{
+					padding-top: 2px;
+				}
+				li a
+				{
+				color: #44484B;
+				text-decoration: none;
+				font-size: 12px;
+				}
+			}
+			.dibu-liebiao2
+			{
+				list-style-type: none;
+				float: left;
+				margin-left: 40px;
+				text-decoration: none;
+				list-style-image:url("img/list.jpg");
+				
+				li
+				{
+					padding-top: 2px;
+				}
+				li a
+				{
+				color: #44484B;
+				text-decoration: none;
+				font-size: 12px;
+				}
+			}
+			/* 版权 */
+			.banquan-wenzi
+			{
+				font-size: 14px;
+				color: #8F8F8F;
+			}
+			
+		</style>
+		<title>TREVISO  theme</title>
+	</head>
+	<body >
+		<div style="width:1346px;margin: auto;">
+			<!-- 头部搜索 -->
+			<div style="background-color:white;height: 105px;">
+				<!-- 图标 -->
+				<img src="img/logo.jpg" style="margin-left: 180px;margin-top: 35px;"/>
+				<!-- 搜索框 -->
+				<div class="topnav">
+					<input type="text" placeholder="SEARCG..." class="topnav1">
+					<img src="img/search.jpg"/>
+				</div>
+	
+			</div>
+			<!-- 导航栏 -->
+			<div class="daohangtiao">
+				<ul>
+				  <li><a href="#">集团介绍</a></li>
+				  <li><a href="#">产品中心</a></li>
+				  <li><a href="#">市场市场</a></li>
+				  <li><a href="#">技术研发</a></li>
+				  <li><a href="#">国际合作</a></li>
+				  <li><a href="#">投资者关系</a></li>
+				  <li><a href="#">新闻资讯</a></li>
+				  <li><a href="#">人力资源</a></li>
+				</ul>
+			</div>
+			<!--------------------------------------------------------- 海报 -->
+			<div class="lunbo">
+					<div class="images">
+			        <a href="javascript:;" class="arrow_l"> <-- </a>
+			        <a href="javascript:;" class="arrow_r"> --> </a>
+			        <ul>
+			            <li><img src="img/banner.jpg" alt=""></li>
+						<li><img src="img/banner.jpg" alt=""></li>
+						<li><img src="img/banner.jpg" alt=""></li>
+						<li><img src="img/banner.jpg" alt=""></li>
+						<li><img src="img/banner.jpg" alt=""></li>
+						<li><img src="img/banner.jpg" alt=""></li>
+			            <!-- <li><img src="./images/flame-girl1.jpg" alt=""></li> -->
+			        </ul>
+			        <ol class="circle">
+			            <!-- <li></li>
+			            <li></li>
+			            <li></li>
+			            <li></li> -->
+			        </ol>
+			</div>
+			</div>
+
+			
+<!-- 			<div style="margin: auto;">
+				<img src="img/banner.jpg"/>
+			</div> -->
+			<!--------------------------------------------- 公司新闻、公司介绍、人文才招聘 -->
+			<div style="height: 250px;margin-left: -15px;">
+				<!-- 公司新闻 -->
+				<div style="height: 250px,width: 500px;margin-left: 180px;float: left;">
+					<div><p class="biaoti">公司新闻</p></div>
+					<div style="width: 500px;margin-top: -10px;">
+						<ul class="xinwen1">
+							<li><a href="#">成简称懂事长出现ATBA集团召开年度小酥手大会</a></li>
+							<li><a href="#">产品中心成简称懂事长出现ATBA集团召开年度小会...</a></li>
+							<li><a href="#">市场市场成简称懂事长出现ATBA集</a></li>
+							<li><a href="#">技术研发成简称懂事长出现ATBA集团召开</a></li>
+							<li><a href="#">国际合作成简称懂事长出现ATBA集团召开年大会</a></li>
+							<li><a href="#">投资者关系成简称懂事长出现ATBA集团召开年酥手大会</a></li>
+						</ul>
+						<ul class="xinwen2">
+							<li><a href="#">2013-07-30</a></li>
+							<li><a href="#">2013-07-30</a></li>
+							<li><a href="#">2013-07-30</a></li>
+							<li><a href="#">2013-07-30</a></li>
+							<li><a href="#">2013-07-30</a></li>
+							<li><a href="#">2013-07-31</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- 公司介绍 -->
+				<div style="width: 250px;height: 250px;float: left;background-color:#F1F1F1;">
+					<div style="margin-left: 20px;"><p class="biaoti">公司介绍</p></div>
+					<div style="margin-left: 20px;margin-top: 45px;">
+						<p style="font-size: 15px;color:#44484B;">公司成立于1984年，</p>
+					</div>
+					<div style="margin-left: 20px;margin-top: -10px;">
+						<p style="font-size: 13px;color:#44484B;">经过近30年的发展</p>
+					</div>
+					<div style="margin-left: 20px;margin-top: 30px;margin-right: 20px;">
+						<p style="font-size: 12px;color:#9B9B9B;">已经成为电气制造，房地产开发和金融投资三业并举的综合性跨国...</p>
+					</div>
+				</div>
+				<!-- 人文才招聘 -->
+				<div style="width: 260px;height: 250px;float: left;background-color: #FBFBFB;">
+					<div style="margin-left: 30px;"><p class="biaoti">人才招聘</p></div>
+					<div style="margin-left: 20px;margin-top: 20px;margin-right: 10px;">
+						<p style="font-size: 14px;color:#44484B;">培养一流的人才，铸造一流的工程实现员工与企业的共同发展</p>
+					</div>
+					<div>
+						<!-- more按钮 -->
+						<div>
+							<div style="height: 25px;width: 80px;float: left;background-color: #B0B0B0;margin-left: 20px;margin-top: 25px;border-radius: 4px;">
+								<div style="float: left;margin-top: -5px;margin-left: 10px;">
+									<p style="font-size: 11px;color:#FFFFFF;">MORE</p>
+								</div>
+								<div style="float: right;margin-right: 13px;margin-top: -2px;"><img src="img/arrow.jpg"/></div>
+							</div>
+						</div>
+						<div style="float: right;margin-top: 20px;"><img src="img/horse.jpg"/></div>
+					</div>
+				</div>
+			</div>
+			<!------------------------------------------------ 市场项目 -->
+			<div style="height:300px;margin-left:160px;"> 
+				<div style="margin-left: 0px;margin-top: 30px;"><p class="biaoti">市场项目</p></div>
+				<div style="margin-top: -30px;">
+					<!-- 图片1 -->
+					<div class="shichang-tuwen1">
+						<div><img src="img/R-C.jpg" width="238" height="160"/></div>
+						<div>
+							<p class="shichang-wenzi">交通轨道：由于主要采用电气牵引，而且轮轨摩擦阻力较小，与公共...</p>
+						</div>
+					</div>
+					
+					<div class="shichang-tuwen234">
+						<div><img src="img/R-C (1).jpg"" width="238" height="160"/></div>
+						<div>
+							<p class="shichang-wenzi">节能环保：由于主要采用电气牵引，而且轮轨摩擦阻力较小，与公共...</p>
+						</div>
+					</div>
+					<div class="shichang-tuwen234">
+						<div><img src="img/6307.jpg_wh860.jpg" width="238" height="160"/></div>
+						<div>
+							<p class="shichang-wenzi">航空与舰船：由于主要采用电气牵引，而且轮轨摩擦阻力较小，与公共...</p>
+						</div>
+					</div>
+					<div class="shichang-tuwen234">
+						<div><img src="img/5215.jpg_wh1200.jpg" width="238" height="160"/></div>
+						<div>
+							<p class="shichang-wenzi">石油、天然气及采矿：由于主要采用电气牵引，而且轮轨摩擦阻力较小，与公共...</p>
+						</div>
+					</div>
+
+					</div>
+				</div>
+			</div>
+			<!-------------------------------------------------- 底部导航栏 -->
+			<div style="height:290px;background-color: #E5E5E5;width:1346px;margin: auto;">
+				<!-- 产品中心 -->
+				<div style="margin-left: 160px;width: 480px;float: left;">
+					<div style="padding-top: 15px;height: 65px;width: 480px;border-style:none none solid none;border-color: #C2C2C2;">
+						<p class="dibu-biaoti">产品中心</p>
+					</div>
+					<div>
+						<div>
+							<ul class="dibu-liebiao1">
+								<li><a href="#">汽车电机</a></li>
+								<li><a href="#">日用电机</a></li>
+								<li><a href="#">特种电机</a></li>
+								<li><a href="#">大功率电机</a></li>
+								<li><a href="#">电工设备</a></li>
+							</ul>
+						</div>
+						<div>
+							<ul class="dibu-liebiao2">
+								<li><a href="#">工业驱动和自动化</a></li>
+								<li><a href="#">高压变频和系统集成</a></li>
+								<li><a href="#">混泥土搅拌机</a></li>
+								<li><a href="#">电动车辆</a></li>
+							</ul>
+						</div>
+						<div>
+							<ul class="dibu-liebiao2">
+								<li><a href="#">电池电源</a></li>
+								<li><a href="#">输变电设备</a></li>
+								<li><a href="#">楼盘信息</a></li>
+								<li><a href="#">景荣产品</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- 技术研发 -->
+				<div style="margin-left: 40px;width: 100px;float: left;">
+					<div style="padding-top: 15px;height: 65px;width: 180px;border-style:none none solid none;border-color: #C2C2C2;">
+						<p class="dibu-biaoti">技术研发</p>
+					</div>
+					<div>
+						<div>
+							<ul class="dibu-liebiao1">
+								<li><a href="#">科技力量</a></li>
+								<li><a href="#">先进设备</a></li>
+								<li><a href="#">研发创新</a></li>
+								<li><a href="#">工艺流程</a></li>
+							</ul>
+						</div>
+				</div>
+				<!-- 营销网络 -->
+				<div style="margin-left: 40px;width: 300px;float:left;margin-top: -205px;margin-left: 220px;">
+					<div style="padding-top: 15px;height: 65px;width: 280px;border-style:none none solid none;border-color: #C2C2C2;">
+						<p class="dibu-biaoti">营销网络</p>
+					</div>
+					<div style="margin-top: 25px;margin-left: 30px;">
+						<img src="img/map.jpg"/>
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		<!----------------------------------------------------- 底部版权栏 -->
+		<div style="height:290px;width:1346px;margin: auto;margin-top: 20px;">
+			<div style="float: left;margin-left: 160px;">
+				<p class="banquan-wenzi">网站地图&nbsp;|&nbsp;联系我们&nbsp;|&nbsp;关注关注&nbsp;|&nbsp;采购系统入口</p>
+			</div>
+			<div style="float: left;margin-left: 60px;">
+				<p class="banquan-wenzi">COPYRIGHT&nbsp;©&nbsp;2013控股控股集团&nbsp;版权所有&nbsp;浙ICP备06005901号&nbsp;技术支持：博彩互动&nbsp;&nbsp;&nbsp;分享到：</p>
+			</div>
+			<div style="float: left;margin-top: 14px;">
+				<img src="img/ben.jpg"/>&nbsp;<img src="img/ben.jpg"/>&nbsp;<img src="img/ben.jpg"/>&nbsp;<img src="img/ben.jpg"/>&nbsp;<img src="img/ben.jpg"/>
+			</div>
+		</div>
+
+	</body>
+</html>
